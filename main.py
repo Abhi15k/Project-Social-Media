@@ -119,13 +119,21 @@ async def create_post(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    print("Current User:", current_user)  # Add this line to check the content of current_user
+
     # Use the authenticated user to create and save the post
-    db_post = models.Post(**post.dict(), user_id=int(current_user['sub']))
+    try:
+        user_id = int(current_user['sub'])
+    except KeyError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+    db_post = models.Post(**post.dict(), user_id=user_id)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
 
     return db_post
+
 
 @app.get("/users/", response_model=list[UserResponse])
 async def list_users(db: Session = Depends(get_db)):
