@@ -42,7 +42,7 @@ class UserResponse(BaseModel):
         orm_mode = True
 
 # Your own secret key, used to sign the JWTs
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = "150903"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -79,7 +79,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    return decode_token(token)
+    try:
+        payload = decode_token(token)
+        return payload
+    except JWTError:
+        raise credentials_exception
 
 @app.post("/signup/")
 async def signup(signup: SignUp, db: Session = Depends(get_db)):
@@ -112,18 +116,16 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @app.post("/posts/", response_model=PostResponse)
 async def create_post(
     post: PostCreate,
-    current_user: models.User = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     # Use the authenticated user to create and save the post
-    db_post = models.Post(**post.dict(), user_id=current_user.id)
+    db_post = models.Post(**post.dict(), user_id=int(current_user['sub']))
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
 
     return db_post
-
-
 
 @app.get("/users/", response_model=list[UserResponse])
 async def list_users(db: Session = Depends(get_db)):
