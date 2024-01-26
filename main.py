@@ -42,7 +42,7 @@ class UserResponse(BaseModel):
         orm_mode = True
 
 # Your own secret key, used to sign the JWTs
-SECRET_KEY = "150903"
+SECRET_KEY = "3f5555f341e0225bc00df71e2697bd6f56769a7311ae369681e077f63cfcd1ce"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
