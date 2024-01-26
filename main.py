@@ -27,8 +27,9 @@ class PostCreate(BaseModel):
 class PostResponse(BaseModel):
     id: int
     text: str
-    user_id: int
+    user_id: int 
     created_at: datetime
+
 
 class SignUp(BaseModel):
     username: str
@@ -81,9 +82,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     )
     try:
         payload = decode_token(token)
+        print("Decoded Token Payload:", payload)
         return payload
     except JWTError:
         raise credentials_exception
+
+
 
 @app.post("/signup/")
 async def signup(signup: SignUp, db: Session = Depends(get_db)):
@@ -119,20 +123,28 @@ async def create_post(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    print("Current User:", current_user)  # Add this line to check the content of current_user
-
-    # Use the authenticated user to create and save the post
-    try:
-        user_id = int(current_user['sub'])
-    except KeyError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-
+    user_id = get_user_id_from_current_user(current_user, db)
     db_post = models.Post(**post.dict(), user_id=user_id)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
 
     return db_post
+
+def get_user_id_from_current_user(current_user: dict, db: Session = Depends(get_db)) -> int:
+    username = current_user['sub']
+    user = db.query(models.User).filter(models.User.username == username).first()
+    if user:
+        return user.id
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+
+
+
 
 
 @app.get("/users/", response_model=list[UserResponse])
