@@ -110,19 +110,20 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"message": "Login successfully", "access_token": access_token, "token_type": "bearer"}
 
 @app.post("/posts/", response_model=PostResponse)
-async def create_post(post: PostCreate, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
-    # Fetch the user based on the provided username
-    user = db.query(models.User).filter(models.User.id == current_user['sub']).first()
-    if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-
-    # Create and save the post
-    db_post = models.Post(**post.dict(), user_id=user.id)
+async def create_post(
+    post: PostCreate,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Use the authenticated user to create and save the post
+    db_post = models.Post(**post.dict(), user_id=current_user.id)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
 
     return db_post
+
+
 
 @app.get("/users/", response_model=list[UserResponse])
 async def list_users(db: Session = Depends(get_db)):
