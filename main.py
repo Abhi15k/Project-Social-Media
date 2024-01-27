@@ -27,7 +27,7 @@ class PostCreate(BaseModel):
 class PostResponse(BaseModel):
     id: int
     text: str
-    user_id: int 
+    user_name: str 
     created_at: datetime
 
 
@@ -123,19 +123,19 @@ async def create_post(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    user_id = get_user_id_from_current_user(current_user, db)
-    db_post = models.Post(**post.dict(), user_id=user_id)
+    user_name = get_user_name_from_current_user(current_user, db)
+    db_post = models.Post(**post.dict(), user_name=user_name)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
 
     return db_post
 
-def get_user_id_from_current_user(current_user: dict, db: Session = Depends(get_db)) -> int:
+def get_user_name_from_current_user(current_user: dict, db: Session = Depends(get_db)) -> int:
     username = current_user['sub']
     user = db.query(models.User).filter(models.User.username == username).first()
     if user:
-        return user.id
+        return user.username
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -19,7 +19,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_name = Column(String, ForeignKey("users.username"))
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="posts")
