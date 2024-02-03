@@ -70,11 +70,11 @@ python -m venv venv
 
 8. **Test the Endpoints:**
 
-   Use tools like curl or Postman to test the API endpoints, or you can use the Swagger documentation interface.
+   -Use tools like curl or Postman to test the API endpoints, or you can use the Swagger documentation interface.
 
-   while testing pass the values in JASON for 'signup/' in postman and for '/login' pass values in x-www-form-urlencoded
+   -while testing pass the values in JASON for 'signup/' in postman and for '/login' pass values in x-www-form-urlencoded
 
-   while testing the '/posts/' Please use Authorization in header "Bearer <Your login token>" (Note:"For security here tokenization is done so without token you cannot post. Token will automatically generate after login")
+   -while testing the '/posts/' Please use Authorization in header "Bearer <Your login token>" (Note:"For security here tokenization is done so without token you cannot post. Token will automatically generate after login")
 
 9. **Shutdown the application:**
    <br>Press Ctrl + C in the terminal to stop the running FastAPI application.
