@@ -19,7 +19,10 @@ git clone https://github.com/Abhi15k/Project-Social-Media.git
 ```
 
 2. **Navigate to the project directory:**
-   cd Project-Social-Media
+
+```bash
+  cd Project-Social-Media
+```
 
 3. **Create a virtual environment:**
 
@@ -48,6 +51,7 @@ python -m venv venv
    ```
 
 6. **Database setup:**
+
    Update the database connection string in `database.py` if needed.
 
    Apply database migrations:
@@ -65,6 +69,7 @@ python -m venv venv
    Open your browser and go to http://127.0.0.1:8000/docs to interact with the Swagger documentation.
 
 8. **Test the Endpoints:**
+
    Use tools like curl or Postman to test the API endpoints, or you can use the Swagger documentation interface.
 
    while testing pass the values in JASON for 'signup/' in postman and for '/login' pass values in x-www-form-urlencoded
