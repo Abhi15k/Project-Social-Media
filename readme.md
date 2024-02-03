@@ -72,7 +72,7 @@ python -m venv venv
    while testing the '/posts/' Please use Authorization in header "Bearer <Your login token>" (Note:"For security here tokenization is done so without token you cannot post. Token will automatically generate after login")
 
 9. **Shutdown the application:**
-   Press Ctrl + C in the terminal to stop the running FastAPI application.
+   <br>Press Ctrl + C in the terminal to stop the running FastAPI application.
 
 10. **Deactivate the virtual environment:**
 
@@ -82,11 +82,11 @@ python -m venv venv
 
 11. **Usage**
 
-    -Sign up using the /signup/ endpoint.
-    -Log in using the /login endpoint to obtain an access token.
-    -Use the access token to create posts using the /posts/ endpoint.
-    -List users with the /users/ endpoint.
-    -List recent posts with the /recent_posts/ endpoint.
+    -Sign up using the /signup/ endpoint.<br>
+    -Log in using the /login endpoint to obtain an access token.<br>
+    -Use the access token to create posts using the /posts/ endpoint.<br>
+    -List users with the /users/ endpoint.<br>
+    -List recent posts with the /recent_posts/ endpoint.<br>
 
 12. **Troubleshooting**
 
